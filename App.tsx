@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import { CarteiraIcon, CasaIcon, PessoaIcon, CarteiraIconSelected, CasaIconSelected, PessoaIconSelected } from './image';
 import { FooterButton } from './components/FooterButton';
 import { useState } from 'react';
 import { SuaContaPage } from './components/pages/SuaContaPage';
@@ -12,9 +11,18 @@ export default function App() {
   const [selected, setSelected] = useState(1);
 
   const footerIcons = [
-    { id: 0, img: CarteiraIcon, selImg: CarteiraIconSelected, text: "Carteira", selected: false },
-    { id: 1, img: CasaIcon, selImg: CasaIconSelected, text: "Início", selected: true },
-    { id: 2, img: PessoaIcon, selImg: PessoaIconSelected, text: "Sua Conta", selected: false },
+    {
+      id: 0, img: require('./components/image/carteira.png'), selImg: require('./components/image/carteiraSelected.png'),
+      text: "Carteira", selected: false, width: 42, height: 42
+    },
+    {
+      id: 1, img: require('./components/image/casinha.png'), selImg: require('./components/image/casinhaSelected.png'),
+      text: "Início", selected: true, width: 41, height: 37
+    },
+    {
+      id: 2, img: require('./components/image/pessoa.png'), selImg: require('./components/image/pessoaSelected.png'),
+      text: "Sua Conta", selected: false, width: 30, height: 34
+    },
   ];
 
   const pages = [
@@ -24,23 +32,26 @@ export default function App() {
   ];
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      {pages[selected]}
-      <View style={styles.footer}>
-        {footerIcons.map((icon) => {
-          return <FooterButton
-            key={icon.id}
-            buttonId={icon.id}
-            image={icon.img}
-            selImg={icon.selImg}
-            text={icon.text}
-            selected={icon.id == selected}
-            setSelected={setSelected}
-          />
-        })}
+    <>
+      <StatusBar style="light" hidden />
+      <View style={styles.container}>
+        {pages[selected]}
+        <View style={styles.footer}>
+          {footerIcons.map((icon) => {
+            return <FooterButton
+              key={icon.id}
+              buttonId={icon.id}
+              image={icon.img}
+              selImg={icon.selImg}
+              text={icon.text}
+              selected={icon.id == selected}
+              setSelected={setSelected}
+              size={{ w: icon.width, h: icon.height }}
+            />
+          })}
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -54,6 +65,7 @@ const styles = StyleSheet.create({
   footer: {
     width: '100%',
     position: 'absolute',
+    zIndex: 5,
     bottom: 0,
     flex: 1,
     flexDirection: 'row',

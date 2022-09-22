@@ -7,9 +7,21 @@ interface FooterButtonProps {
     selected: boolean
     selImg: any
     setSelected: any
+    size: {
+        h: number,
+        w: number
+    }
 }
 
-export const FooterButton = ({ buttonId, image, text, selected, selImg, setSelected }: FooterButtonProps) => {
+export const FooterButton = ({ buttonId, image, text, selected, selImg, setSelected, size }: FooterButtonProps) => {
+
+    const imgStyle = StyleSheet.create({
+        footerIcon: {
+            resizeMode: "stretch",
+            width: size.w,
+            height: size.h,
+        }
+    })
 
     const handleClick = () => {
         setSelected(buttonId);
@@ -21,7 +33,7 @@ export const FooterButton = ({ buttonId, image, text, selected, selImg, setSelec
             onPress={handleClick} >
             <Image
                 source={selected ? selImg : image}
-                style={styles.footerIcon} />
+                style={imgStyle.footerIcon} />
             <Text
                 style={selected ? styles.selectedText : styles.footerText}>
                 {text}
@@ -37,11 +49,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         maxWidth: '30%',
         height: '100%',
-    },
-    footerIcon: {
-        resizeMode: "stretch",
-        width: 40,
-        height: 40,
     },
     footerText: {
         color: '#326B8B',
