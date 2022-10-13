@@ -1,46 +1,32 @@
-import { useEffect, useState } from "react";
-import { Text, ScrollView, View, StyleSheet, TouchableOpacity, Image, Alert } from "react-native"
+import { useState, useEffect } from "react";
+import { Text, ScrollView, View, StyleSheet, TouchableOpacity, Image } from "react-native"
+import { ViewPropsType } from "../../App";
 import { LinkSquare } from "../LinkSquare";
+import { useUserStore } from "../../userStore";
 
 
-export const InicioPage = () => {
+export const InicioPage = ({ navigate }: ViewPropsType) => {
 
     const [showSaldo, setShowSaldo] = useState<boolean>(false);
-    const [user, setUser] = useState<any>();
+    const user = useUserStore(state => state.user);
+    const authViaEmail = useUserStore(state => state.authViaEmail);
+
     const botoes = [
-        { text: "Transferência" },
-        { text: "Pix" },
-        { text: "Adicionar Saldo" },
-        { text: "Cartão" }
+        { id: 1, text: "Transferência" },
+        { id: 2, text: "Pix" },
+        { id: 3, text: "Adicionar Saldo" },
+        { id: 4, text: "Cartão" }
     ]
 
-    const renderBotao = (botao: typeof botoes[0]) => {
+    useEffect(() => {
+        authViaEmail({ email: 'viktor@gmail.com', password: '12345678' })
+    }, [])
+
+    const renderBotao = (botao: { id: number, text: string }) => {
         return (
-            <LinkSquare text={botao.text} />
+            <LinkSquare text={botao.text} key={botao.id} />
         )
     }
-
-    const fetchUser = async () => {
-        const res = await fetch('http://192.168.56.1:8000/auth-via-email/', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: 'igor@banco.com',
-                password: '123'
-            })
-        })
-
-        const userData = await res.json()
-
-        setUser(userData)
-    }
-
-    useEffect(() => {
-        fetchUser()
-    }, [])
 
     return (
         <ScrollView style={styles.MainContainer}>
@@ -56,7 +42,7 @@ export const InicioPage = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row' }} >
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ height: 90 }}>
                         {botoes.map(botao => renderBotao(botao))}
                     </ScrollView>
                 </View>
@@ -70,7 +56,7 @@ export const InicioPage = () => {
                         para todos!
                     </Text>
                 </View>
-                <TouchableOpacity onPress={() => Alert.alert('Ok fera')} style={styles.buttonQuero}>
+                <TouchableOpacity onPress={() => navigate('SuaContaPage')} style={styles.buttonQuero}>
                     <Text style={styles.buttonQueroText}>Quero o meu!</Text>
                 </TouchableOpacity>
                 <Text>
@@ -142,11 +128,12 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: '600',
         fontSize: 20,
-        marginTop: 20
+        marginTop: 35
     },
     PremiumContainer: {
         flex: 1,
-        minHeight: 100,
+        minHeight: 35,
+        maxHeight: 110,
         flexDirection: 'row',
         width: '92%',
         marginHorizontal: 'auto',

@@ -1,19 +1,32 @@
 import { StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { AppPages } from '../App';
+
+
+export type FooterIcon = {
+    id: number
+    img: string
+    selImg: string
+    text: string
+    selected: boolean
+    width: number
+    height: number
+    view: AppPages
+}
 
 interface FooterButtonProps {
-    buttonId: number
     image: any
     text: string
     selected: boolean
     selImg: any
-    setSelected: any
+    navigateTo: (page: AppPages) => void
     size: {
         h: number,
         w: number
     }
+    view: AppPages
 }
 
-export const FooterButton = ({ buttonId, image, text, selected, selImg, setSelected, size }: FooterButtonProps) => {
+export const FooterButton = ({ view, image, text, selected, selImg, navigateTo, size }: FooterButtonProps) => {
 
     const imgStyle = StyleSheet.create({
         footerIcon: {
@@ -23,9 +36,7 @@ export const FooterButton = ({ buttonId, image, text, selected, selImg, setSelec
         }
     })
 
-    const handleClick = () => {
-        setSelected(buttonId);
-    }
+    const handleClick = () => navigateTo(view);
 
     return (
         <TouchableOpacity

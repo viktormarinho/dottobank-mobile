@@ -1,7 +1,8 @@
 import { Text } from "react-native"
+import { ViewPropsType } from "../../App"
 
+export const SuaContaPage = ({ navigate }: ViewPropsType) => {
 
-export const SuaContaPage = () => {
     return (
         <Text>Pagina Sua Conta</Text>
     )

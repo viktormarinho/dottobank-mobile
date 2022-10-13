@@ -1,4 +1,4 @@
-import { Text, StyleSheet, TouchableOpacity, Image } from "react-native"
+import { Text, StyleSheet, TouchableOpacity } from "react-native"
 
 interface LinkSquareProps {
     text: string
@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     text: {
         color: 'white',
         fontSize: 14,
-        marginTop: 10,
-        fontFamily: 'Inter'
+        marginTop: 10
     }
 })
