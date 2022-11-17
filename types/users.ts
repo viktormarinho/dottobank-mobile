@@ -3,7 +3,7 @@ export interface User {
     id: number;
     email: string;
     password: string;
-    created_at: Date;
+    created_at: string;
     picture: string;
     first_time: boolean;
     cliente: Cliente;
@@ -15,7 +15,7 @@ export interface Cliente {
     username: string;
     cpf: string;
     sexo: string;
-    nascimento: Date;
+    nascimento: string;
     telefone: string;
 }
 

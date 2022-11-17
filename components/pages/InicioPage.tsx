@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Text, ScrollView, View, StyleSheet, TouchableOpacity, Image } from "react-native"
 import { ViewPropsType } from "../../App";
 import { LinkSquare } from "../LinkSquare";
@@ -8,23 +8,30 @@ import { useUserStore } from "../../userStore";
 export const InicioPage = ({ navigate }: ViewPropsType) => {
 
     const [showSaldo, setShowSaldo] = useState<boolean>(false);
-    const user = useUserStore(state => state.user);
-    const authViaEmail = useUserStore(state => state.authViaEmail);
+    const { user, getCards } = useUserStore(({user, getCards}) => ({user, getCards}));
+
+    if (!user) {
+        navigate('LoginPage');
+    }
+
+    const saldo = user?.user.conta.saldo.toString().replace('.', '!!').replace(',', '.').replace('!!', ',');
 
     const botoes = [
-        { id: 1, text: "Transferência" },
-        { id: 2, text: "Pix" },
-        { id: 3, text: "Adicionar Saldo" },
-        { id: 4, text: "Cartão" }
+        { id: 1, text: "Transferir", icon: require('./../image/transferencia_icon.png'), h: 20, w: 40 },
+        { id: 2, text: "Pix", icon: require('./../image/pix_icon.png'), h: 25, w: 25 },
+        { id: 3, text: "Adicionar Saldo", icon: require('./../image/money_icon.png'), h: 25, w: 30 },
+        { id: 4, text: "Cartão", icon: require('./../image/credit_card_icon.png'), h: 25, w: 30 }
     ]
 
-    useEffect(() => {
-        authViaEmail({ email: 'viktor@gmail.com', password: '12345678' })
-    }, [])
-
-    const renderBotao = (botao: { id: number, text: string }) => {
+    const renderBotao = (botao: { id: number, text: string, icon: any, w: number, h: number }) => {
         return (
-            <LinkSquare text={botao.text} key={botao.id} />
+            <LinkSquare 
+                press={() => {}}
+                text={botao.text} 
+                w={botao.w} 
+                h={botao.h}
+                icon={botao.icon} 
+                key={botao.id} />
         )
     }
 
@@ -34,7 +41,7 @@ export const InicioPage = ({ navigate }: ViewPropsType) => {
                 <Text style={styles.seuSaldoText}>Seu Saldo</Text>
                 <View style={styles.dinheiroContainer}>
                     <Text style={styles.seuDinheiroText}>R$</Text>
-                    {showSaldo ? <Text style={styles.dinheiroStyle}>1.423,35</Text> : <View style={styles.line} />}
+                    {showSaldo ? <Text style={styles.dinheiroStyle}>{saldo}</Text> : <View style={styles.line} />}
                     <TouchableOpacity onPress={() => setShowSaldo(!showSaldo)}>
                         {showSaldo ?
                             <Image source={require('./../image/olhoAberto.png')} style={styles.olho} /> :
@@ -46,7 +53,7 @@ export const InicioPage = ({ navigate }: ViewPropsType) => {
                         {botoes.map(botao => renderBotao(botao))}
                     </ScrollView>
                 </View>
-                <Text style={styles.nomePerfilText}>@viktor.marinho</Text>
+                <Text style={styles.nomePerfilText}>{user?.user.conta.dotto_id}</Text>
             </View>
             <View style={styles.WhiteContainer}>
                 <View style={styles.PremiumContainer}>

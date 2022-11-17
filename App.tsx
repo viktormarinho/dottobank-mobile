@@ -6,25 +6,28 @@ import { SuaContaPage } from './components/pages/SuaContaPage';
 import { InicioPage } from './components/pages/InicioPage';
 import { CarteiraPage } from './components/pages/CarteiraPage';
 import React from 'react';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { LoginPage } from './components/pages/LoginPage';
+import { LoginFormPage } from './components/pages/LoginFormPage';
 
-const queryClient = new QueryClient();
 
 const Pages = {
   CarteiraPage: {
     view: CarteiraPage,
-    id: 0
+    id: 0,
+    footer: true
   },
   InicioPage: {
     view: InicioPage,
-    id: 1
+    id: 1,
+    footer: true
   },
   SuaContaPage: {
     view: SuaContaPage,
-    id: 2
+    id: 2,
+    footer: true
   },
-  LoginPage: { view: LoginPage }
+  LoginPage: { view: LoginPage },
+  LoginFormPage: { view: LoginFormPage },
 }
 
 export type AppPages = keyof typeof Pages;
@@ -38,7 +41,7 @@ const RouterOutlet = ({ Page, viewProps }: { Page: React.ComponentType<ViewProps
 
 export default function App() {
 
-  const [selected, setSelected] = useState<{ view: React.ComponentType<ViewPropsType>, id?: number }>(Pages['InicioPage']);
+  const [selected, setSelected] = useState<{ view: React.ComponentType<ViewPropsType>, id?: number, footer?: boolean }>(Pages['InicioPage']);
   const navigateTo = (page: AppPages) => setSelected(Pages[page]);
 
   const footerIcons: FooterIcon[] = [
@@ -57,26 +60,27 @@ export default function App() {
   ];
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <StatusBar style="light" hidden />
-      <View style={styles.footer}>
-        {footerIcons.map((icon) => {
-          return <FooterButton
-            key={icon.id}
-            image={icon.img}
-            selImg={icon.selImg}
-            text={icon.text}
-            selected={icon.id == selected.id}
-            navigateTo={navigateTo}
-            view={icon.view}
-            size={{ w: icon.width, h: icon.height }}
-          />
-        })}
-      </View>
+      {selected.footer ?
+        <View style={styles.footer}>
+          {footerIcons.map((icon) => {
+            return <FooterButton
+              key={icon.id}
+              image={icon.img}
+              selImg={icon.selImg}
+              text={icon.text}
+              selected={icon.id == selected.id}
+              navigateTo={navigateTo}
+              view={icon.view}
+              size={{ w: icon.width, h: icon.height }}
+            />
+          })}
+        </View> : null}
       <View style={styles.container}>
         <RouterOutlet Page={selected.view} viewProps={{ navigate: navigateTo }} />
       </View>
-    </QueryClientProvider>
+    </>
   );
 }
 

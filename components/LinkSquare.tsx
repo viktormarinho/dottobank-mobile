@@ -1,12 +1,17 @@
-import { Text, StyleSheet, TouchableOpacity } from "react-native"
+import { Text, StyleSheet, TouchableOpacity, Image } from "react-native"
 
 interface LinkSquareProps {
     text: string
+    icon: any
+    h: number
+    w: number
+    press: () => void
 }
 
-export const LinkSquare = ({ text }: LinkSquareProps) => {
+export const LinkSquare = ({ text, icon, w, h, press }: LinkSquareProps) => {
     return (
-        <TouchableOpacity style={styles.buttonContainer}>
+        <TouchableOpacity onPress={press} style={styles.buttonContainer}>
+            <Image source={icon} style={{ height: h, width: w }} />
             <Text style={styles.text}>{text}</Text>
         </TouchableOpacity>
     )
